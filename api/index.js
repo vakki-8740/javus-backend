@@ -14,9 +14,9 @@ let db = null;
 
 async function getDb() {
     if (db) return db;
-    const SQL = await initSqlJs({
-        locateFile: file => `https://sql.js.org/dist/${file}`
-    });
+    const wasmUrl = 'https://cdn.jsdelivr.net/npm/sql.js/dist/sql-wasm.wasm';
+    const wasmBuffer = await fetch(wasmUrl).then(r => r.arrayBuffer());
+    const SQL = await initSqlJs({ wasmBinary: wasmBuffer });
     db = new SQL.Database();
     db.run(`
         CREATE TABLE IF NOT EXISTS complaints (
