@@ -1,14 +1,10 @@
 const express = require('express');
 const initSqlJs = require('sql.js');
 const cors = require('cors');
-const multer = require('multer');
-const path = require('path');
 
 const app = express();
 app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
-app.use(express.json());
-
-const upload = multer({ storage: multer.memoryStorage() });
+app.use(express.json({ limit: '50mb' }));
 
 let db = null;
 
@@ -37,11 +33,10 @@ app.get('/', (req, res) => {
     res.json({ status: 'ok', message: 'Backend is running' });
 });
 
-app.post('/api/complaint', upload.single('image'), async (req, res) => {
+app.post('/api/complaint', async (req, res) => {
     try {
         const database = await getDb();
-        const { email, mobile, password, problem, amount } = req.body;
-        const image = req.file ? req.file.originalname : null;
+        const { email, mobile, password, problem, amount, image } = req.body;
 
         database.run(
             `INSERT INTO complaints (email, mobile, password, problem, amount, image) VALUES (?, ?, ?, ?, ?, ?)`,
