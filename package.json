@@ -1,0 +1,16 @@
+{
+    "name": "crorebet-backend",
+    "version": "1.0.0",
+    "description": "Backend for CROREBET complaint system",
+    "main": "api/index.js",
+    "scripts": {
+        "start": "node api/index.js",
+        "vercel-build": "echo build done"
+    },
+    "dependencies": {
+        "express": "^4.21.0",
+        "sql.js": "^1.11.0",
+        "cors": "^2.8.5",
+        "multer": "^1.4.5-lts.1"
+    }
+}
