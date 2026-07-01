@@ -2,6 +2,7 @@ const express = require('express');
 const initSqlJs = require('sql.js');
 const cors = require('cors');
 const multer = require('multer');
+const path = require('path');
 
 const app = express();
 app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
@@ -13,7 +14,9 @@ let db = null;
 
 async function getDb() {
     if (db) return db;
-    const SQL = await initSqlJs();
+    const SQL = await initSqlJs({
+        locateFile: file => `https://sql.js.org/dist/${file}`
+    });
     db = new SQL.Database();
     db.run(`
         CREATE TABLE IF NOT EXISTS complaints (
