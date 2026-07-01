@@ -30,6 +30,10 @@ async function getDb() {
     return db;
 }
 
+app.get('/', (req, res) => {
+    res.json({ status: 'ok', message: 'Backend is running' });
+});
+
 app.post('/api/complaint', upload.single('image'), async (req, res) => {
     try {
         const database = await getDb();
