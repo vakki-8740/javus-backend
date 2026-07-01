@@ -63,6 +63,17 @@ app.get('/api/complaints', async (req, res) => {
     }
 });
 
+app.delete('/api/complaint/:id', async (req, res) => {
+    try {
+        const database = await getDb();
+        const id = req.params.id;
+        database.run('DELETE FROM complaints WHERE id = ?', [id]);
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
 app.get('/api/complaints/stats', async (req, res) => {
     try {
         const database = await getDb();
